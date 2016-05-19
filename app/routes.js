@@ -26,8 +26,8 @@ module.exports = function(app) {
 
 		// create a todo, information comes from AJAX request from Angular
 		Todo.create({
-			text : req.body.text,
-			done : false
+			content : req.body.content,
+			completed : false
 		}, function(err, todo) {
 			if (err)
 				res.send(err);
@@ -38,8 +38,34 @@ module.exports = function(app) {
 
 	});
 
+	// delete a todo and send back remaining todos after deletion
+    app.delete('/api/todos/:todo_id', function (req, res) {
+        Todo.remove({
+            _id: req.params.todo_id
+        }, function (err, todo) {
+            if (err)
+                res.send(err);
+
+            getTodos(res);
+        });
+    });
+
+	app.put('/api/todos/:todo_id', function (req, res) {
+		//console.log("Line 54 routerjs");
+    	Todo.update({
+            _id: req.params.todo_id
+            }, {
+            completed : true
+            }, function (err, todo) {
+            if (err) {
+                res.send(err);
+            };
+            getTodos(res);
+            });
+    });
+
 	// application -------------------------------------------------------------
 	app.get('*', function(req, res) {
-		res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+		res.sendfile('./client/index.html'); // load the single view file (angular will handle the page changes on the front-end)
 	});
 };

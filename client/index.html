@@ -13,10 +13,11 @@
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"><!-- load bootstrap -->
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<style>
-		html 					{ overflow-y:scroll; }
-		body 					{ padding-top:50px; }
-		#todo-list 				{ margin-bottom:30px; }
-		#todo-form 	 			{ margin-bottom:50px; }
+	html 					{ overflow-y:scroll; }
+	body 					{ padding-top:50px; }
+	#todo-list 				{ margin-bottom:30px; }
+	#todo-form 	 			{ margin-bottom:50px; }
+	.done-true				{text-decoration: line-through;}
 	</style>
 
 	<!-- SPELLS -->
@@ -29,7 +30,7 @@
 </head>
 <!-- SET THE CONTROLLER -->
 <body ng-controller="mainController">
-	<div class="container">
+	<div class="container-fluid">
 
 		<!-- HEADER AND TODO COUNT -->
 		<div class="jumbotron text-center">
@@ -37,15 +38,31 @@
 		</div>
 
 		<!-- TODO LIST -->
-		<div id="todo-list" class="row">
+		<div id="todo-list">
 			<div class="col-sm-4 col-sm-offset-4">
 
-				<div class="checkbox"  ng-repeat="todo in todos">
-                                  <label>
-                                  <input type="checkbox"> {{ todo.text }}
-                                  </label>
-                                 </div>
-                             
+				<div ng-repeat="todo in todos">
+					<div class="row">
+						<form class="form-inline">
+							<div class="form-group">
+								<button>>></button>
+								<!-- <div ng-if="todo.complete"> -->
+									<input ng-model="todo.complete" type="checkbox" ng-change="updateTodo(todo._id, todo)">
+									<span class="done-{{todo.complete}}">{{ todo.content }}</span>
+								<!-- </div>
+								<div ng-if="!todo.complete">
+									<input ng-model="todo.complete" type="checkbox" ng-change="updateTodo(todo._id, todo)"> {{ todo.content }}
+								</div> -->
+								
+								<!-- ng-click="deleteTodo(todo._id) -->
+								<!-- <input ng-model="todo.content" class="todo-item" type="text" ></input> -->
+								<!-- ng-change="updateTodo(todo._id, todo)" -->
+							</div>
+						</form>
+					</div>
+					
+				</div>
+
 				<p class="text-center" ng-show="loading">
 					<span class="fa fa-spinner fa-spin fa-3x"></span>
 				</p>
@@ -60,7 +77,7 @@
 					<div class="form-group">
 
 						<!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-						<input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy" ng-model="formData.text">
+						<input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy" ng-model="formData.content">
 					</div>
 
 					<!-- createToDo() WILL CREATE NEW TODOS -->

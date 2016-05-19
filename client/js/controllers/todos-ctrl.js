@@ -4,6 +4,8 @@ angular.module('todoController', [])
 	.controller('mainController', ['$scope','$http','Todos', function($scope, $http, Todos) {
 		$scope.formData = {};
 		$scope.loading = true;
+		$scope.t = true;
+		$scope.f = false;
 
 		// GET =====================================================================
 		// when landing on the page, get all todos and show them
@@ -20,7 +22,7 @@ angular.module('todoController', [])
 
 			// validate the formData to make sure that something is there
 			// if form is empty, nothing will happen
-			if ($scope.formData.text != undefined) {
+			if ($scope.formData.content != undefined) {
 				$scope.loading = true;
 
 				// call the create function from our service (returns a promise object)
@@ -35,4 +37,33 @@ angular.module('todoController', [])
 			}
 		};
 
+		// DELETE ==================================================================
+		$scope.deleteTodo = function(_id) {
+			$scope.loading = true;
+
+			Todos.delete(_id)
+				.success(function(data) {
+					$scope.loading = false;
+					$scope.todos = data;
+				});
+		};
+
+		// UPDATE ==================================================================
+		$scope.updateTodo = function(_id) {
+			//console.log("UPDATING...");
+			//if ($scope.todo.content != undefined) {
+				$scope.loading = true;
+				//console.log("_id: " + _id + " content: " + content);
+				Todos.update(_id)
+					.success(function(data) {
+						$scope.loading = false;
+						//$scope.todos = data;
+					})
+					.error(function(data) {
+                	console.log('Error: ' + data);
+            		});
+			//} else {
+			//	console.log("updatedTodo is undefined");
+			//};
+		}
 	}]);
